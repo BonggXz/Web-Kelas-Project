@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal"
 import Button from "@mui/material/Button"
 import Typography from "@mui/material/Typography"
 import { useSpring, animated } from "@react-spring/web"
-import Chat from "./ChatAnonim"
+import Confess from "./Confess"
 
 // Impor ikon tombol silang (close button)
 import CloseIcon from "@mui/icons-material/Close"
@@ -59,7 +59,7 @@ Fade.propTypes = {
 	p: 4,
 } */
 
-export default function BoxTextAnonim() {
+export default function BoxConfess() {
 	const [open, setOpen] = React.useState(false)
 	const handleOpen = () => setOpen(true)
 	const handleClose = () => setOpen(false)
@@ -72,7 +72,7 @@ export default function BoxTextAnonim() {
 						<img src="/paper-plane.png" alt="" className="w-auto h-6" />
 						<img src="/next.png" alt="" className="h-3 w-3" />
 					</div>
-					<h1 className="capitalize text-white text-left pr-5 text-base font-semibold  mt-5">Public Chat</h1>
+					<h1 className="capitalize text-white text-left pr-5 text-base font-semibold  mt-5">Confess</h1>
 				</div>
 			</div>
 
@@ -98,7 +98,7 @@ export default function BoxTextAnonim() {
 							Text in a modal
 						</Typography> */}
 						<Typography id="spring-modal-description" sx={{ mt: 3 }}>
-							<Chat/>
+							<Confess/>
 						</Typography>
 					</Box>
 				</Fade>

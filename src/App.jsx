@@ -4,6 +4,7 @@ import Carousel from "./Pages/Gallery"
 import FullWidthTabs from "./Pages/Tabs"
 import Footer from "./Pages/Footer"
 import Chat from "./components/ChatAnonim"
+import Menfess from "./components/Confess"
 import AOS from "aos"
 import "aos/dist/aos.css"
 
@@ -29,6 +30,13 @@ function App() {
 				data-aos="fade-up"
 				data-aos-duration="1200">
 				<Chat />
+			</div>
+			<div
+				className="lg:mx-[12%] lg:mt-[5rem] lg:mb-20 hidden lg:block"
+				id="ChatAnonim_lg"
+				data-aos="fade-up"
+				data-aos-duration="1200">
+				<Menfess />
 			</div>
 
 			<Footer />

@@ -76,8 +76,8 @@ body {
 	height: auto;
 	background: radial-gradient(
 			circle,
-			rgba(224, 107, 213, 0.8520658263305322) 0%,
-			rgba(75, 57, 198, 0.9052871148459384) 100%
+			rgb(44, 211, 159, 0.756) 0%,
+		    rgb(44, 211, 76, 0.727) 60%
 		),
 		url("/Background.jpeg");
 	background-repeat: no-repeat;
@@ -121,7 +121,7 @@ body {
 	filter: brightness(0) invert(1);
 }
 
-#BoxOldWeb {
+#BoxMenfess {
 	padding: 10%;
 	height: auto;
 	width: 100%;
@@ -136,7 +136,7 @@ body {
 	border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
-#BoxOldWeb Img {
+#BoxMenfess Img {
 	filter: brightness(0) invert(1);
 }
 
@@ -210,6 +210,19 @@ body {
 	text-shadow: #d41a77 2px 0 20px;
 }
 
+.css-17g9dxh-MuiSlider-root {
+    border-radius: 12px;
+    box-sizing: content-box;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    touch-action: none;
+    color: #2fe72f !important;
+    -webkit-tap-highlight-color: transparent;
+    height: 4px;
+    width: 100%;
+    padding: 13px 0;
+}
 .slick-slide {
 	padding: 0 10px;
 	box-sizing: border-box;
@@ -266,7 +279,7 @@ body {
 #Mesh1 {
 	width: 100%;
 	position: absolute;
-	background-image: radial-gradient(at -66% 56.8%, hsl(292, 93%, 53%) 0px, transparent 50%);
+	background-image: radial-gradient(at -66% 56.8%, hsl(121, 93%, 53%) 0px, transparent 50%);
 	background-repeat: no-repeat, no-repeat;
 	z-index: -999;
 }
@@ -279,7 +292,7 @@ body {
 
 
 #Tabs {
-	background-image: radial-gradient(at 122.3% 55.5%, hsla(292, 93%, 53%, 0.492) 0px, transparent 50%),
+	background-image: radial-gradient(at 122.3% 55.5%, hsla(119, 93%, 53%, 0.492) 0px, transparent 50%),
 		radial-gradient(at 81.4% 65.2%, hsl(0, 0%, 12%) 0px, transparent 50%);
 }
 
@@ -404,8 +417,8 @@ input:focus {
 #Footer {
 	background: linear-gradient(
 		to top,
-		rgba(218, 9, 229, 0.39) 5%,
-		rgba(218, 9, 229, 0.149) 55%,
+		rgba(26, 221, 0, 0.39) 5%,
+		rgba(24, 229, 9, 0.149) 55%,
 		rgba(0, 0, 0, 0)
 	);
 }
@@ -430,6 +443,99 @@ input:focus {
 	filter: brightness(0) invert(1);
 }
 
+#Menfess {
+	color: white;
+}
+
+/* Ubah teks Kirim Menfess */
+#menfessglow {
+	color: white; /* Ubah warna teks menjadi putih */
+	text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), /* Efek glow */
+				 0 0 20px rgba(255, 255, 255, 0.6),
+				 0 0 30px rgba(255, 255, 255, 0.4);
+	margin-top: -10px; /* Geser teks sedikit ke atas */
+	font-size: 2rem; /* Ukuran font sesuai keinginan */
+	font-weight: bold; /* Tebalkan teks */
+	text-align: center; /* Pastikan teks berada di tengah */
+  }
+  
+
+.menfess-container {
+	background: rgba(255, 255, 255, 0.1); /* Transparansi */
+	border-radius: 15px;
+	padding: 20px;
+	width: 90%;
+	max-width: 400px;
+	margin: 0 auto;
+	backdrop-filter: blur(15px); /* Efek blur kaca */
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Shadow yang lebih halus */
+	border: 1px solid rgba(255, 255, 255, 0.3); /* Garis border transparan */
+  }
+  
+  .menfess-box {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin-top: 15px;
+	padding: 20px;
+	background: rgba(7, 4, 4, 0.15); /* Transparansi kaca */
+	border-radius: 15px;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .menfess-input, .message-box {
+	background: rgba(255, 255, 255, 0.2); /* Transparansi pada input */
+	border: none;
+	padding: 12px;
+	border-radius: 8px;
+	font-size: 16px;
+	outline: none;
+	font-family: 'Poppins', sans-serif; /* Font yang elegan */
+	color: white; /* Warna teks putih agar kontras */
+	backdrop-filter: blur(10px); /* Efek kaca buram */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow halus */
+	border: 1px solid rgba(0, 0, 0, 0.3); /* Border kaca */
+  }
+  
+  .menfess-input::placeholder, .message-box::placeholder {
+	color: #ccc; /* Placeholder dengan warna abu-abu lembut */
+  }
+  
+  .message-box {
+	min-height: 100px;
+	resize: none; /* Mencegah textarea berubah ukuran */
+  }
+  
+  .send-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.15); /* Transparansi dan warna dasar kaca */
+	color: white;
+	padding: 12px;
+	border: none;
+	border-radius: 8px;
+	backdrop-filter: blur(10px); /* Efek kaca buram */
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Shadow halus */
+	border: 1px solid rgba(255, 255, 255, 0.3); /* Border kaca */
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	font-family: 'Poppins', sans-serif; /* Font tombol */
+  }
+  
+  .send-button:hover {
+	background-color: rgba(255, 255, 255, 0.25); /* Sedikit lebih cerah saat hover */
+	transform: scale(1.05); /* Sedikit membesar saat hover */
+  }
+  
+  .send-button img {
+	width: 20px;
+	height: 20px;
+  }
+  
+  
+
 /* Untuk dots yang tidak aktif */
 .slick-dots li button:before {
 	color: rgba(255, 255, 255, 0.6); /* Warna putih dengan tingkat keburaman 60% */
@@ -450,6 +556,17 @@ input:focus {
 	}
 	.modal-container {
 		width: auto;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	#Home {
+		background: radial-gradient(
+			circle,
+			rgb(44, 211, 159, 0.756) 0%,
+		    rgb(44, 211, 76, 0.727) 60%
+		),
+		url("/Background1.jpeg");
 	}
 }
 

@@ -7,6 +7,7 @@ const Selasa = React.lazy(() => import("../components/Mapel/Selasa"))
 const Rabu = React.lazy(() => import("../components/Mapel/Rabu"))
 const Kamis = React.lazy(() => import("../components/Mapel/Kamis"))
 const Jumat = React.lazy(() => import("../components/Mapel/Jumat"))
+const Sabtu = React.lazy(() => import("../components/Mapel/Sabtu"))
 
 const Schedule = () => {
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -26,6 +27,7 @@ const Schedule = () => {
         ["Putri", "Paulista", "Firdaus", "Attala", "Ardian"],
         ["Cariska", "Nila", "Wahid", "Togi", "Annisa"],
         ["Sultan", "Zaini", "Fajri", "Arif"],
+        ["Hafid", "Nabilah", "Nadia", "Nabilah", "Hafid"],
     ]
 
     const dayComponents = [

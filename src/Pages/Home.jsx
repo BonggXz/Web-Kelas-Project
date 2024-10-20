@@ -1,5 +1,5 @@
 import BoxClassIg from "../components/BoxClassIg"
-import BoxOldWeb from "../components/BoxOldWeb"
+import BoxConfess from "../components/BoxConfess"
 import BoxTextAnonim from "../components/BoxTextAnonim"
 import Navbar from "../components/Navbar"
 
@@ -8,23 +8,23 @@ const Home = () => {
 		<div className="text-white px-[10%]" id="Home">
 			<Navbar />
 			<div className="lg:hidden">
-				<div className="font-bold text-5xl text-center py-20 ">XII TKJ 3</div>
+				<div className="font-bold text-5xl text-center py-20 ">XI F 5</div>
 				<div
 					className="border-2 flex justify-between px-10 text-4xl font-bold py-2 relative"
 					id="TotalSiswa">
 					<div id="AngkaGradientBlue" className="flex items-center justify-center ">
-						25
+						15
 					</div>
 					<div className="">
 						<span id="AngkaGradientBlue" className="text-5xl">
 							3
 						</span>
 						<span id="AngkaGradientPink" className="text-5xl">
-							7
+							8
 						</span>
 					</div>
 					<div id="AngkaGradientPink" className="flex items-center justify-center">
-						12
+						23
 					</div>
 				</div>
 
@@ -33,7 +33,7 @@ const Home = () => {
 						<BoxClassIg />
 					</div>
 					<div className="grid gap-2 md:gap-0 md:grid-cols-1">
-						<BoxOldWeb />
+						<BoxConfess />
 						<BoxTextAnonim />
 					</div>
 				</div>
@@ -47,7 +47,7 @@ const Home = () => {
 						WELCOME
 					</h1>
 					<h6 className="text-sm" style={{ letterSpacing: "5px" }}>
-						TO XII TKJ 3
+						TO XI F 5
 					</h6>
 				</div>
 			</div>
