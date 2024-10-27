@@ -12,28 +12,21 @@ import {
 import SwipeableViews from "react-swipeable-views";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import Swal from "sweetalert2";
 import {
-  getStorage,
-  ref,
-  listAll,
-  getDownloadURL,
-  uploadBytes,
-  deleteObject
-} from "firebase/storage";
-import {
-  addDoc,
   collection,
   getDocs,
   deleteDoc,
   doc
 } from "firebase/firestore";
 import { db } from "../firebase";
-import Swal from "sweetalert2";
 
 const AdminManage = ({ isOpen, onClose }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [images, setImages] = useState([]);
+  const [approvedImages, setApprovedImages] = useState([]);
   const [menfessMessages, setMenfessMessages] = useState([]);
+  const [publicChatMessages, setPublicChatMessages] = useState([]);
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -43,35 +36,14 @@ const AdminManage = ({ isOpen, onClose }) => {
     setTabIndex(index);
   };
 
-  // Fungsi untuk mengambil daftar gambar dari Firebase Storage
-  const fetchImagesFromFirebase = async () => {
-		try {
-			const storage = getStorage()
-			const storageRef = ref(storage, "images/")
+  const fetchImagesFromLocalStorage = () => {
+    const storedImages = JSON.parse(localStorage.getItem("Galery/images")) || [];
+    const storedApprovedImages = JSON.parse(localStorage.getItem("Galery/GambarAman")) || [];
+    
+    setImages(storedImages);
+    setApprovedImages(storedApprovedImages);
+  };
 
-			const imagesList = await listAll(storageRef)
-
-			const imagePromises = imagesList.items.map(async (item) => {
-				const url = await getDownloadURL(item)
-				const metadata = await getMetadata(item)
-
-				return {
-					url,
-					timestamp: metadata.timeCreated,
-				}
-			})
-
-			const imageURLs = await Promise.all(imagePromises)
-
-			// Urutkan array berdasarkan timestamp (dari yang terlama)
-			imageURLs.sort((a, b) => a.timestamp - b.timestamp)
-
-			setImages(imageURLs)
-		} catch (error) {
-			console.error("Error fetching images from Firebase Storage:", error)
-		}
-	}
-  // Fungsi untuk mengambil daftar menfess dari Firestore
   const fetchMenfessMessages = async () => {
     const menfessCollectionRef = collection(db, "menfess");
     const querySnapshot = await getDocs(menfessCollectionRef);
@@ -85,7 +57,69 @@ const AdminManage = ({ isOpen, onClose }) => {
     setMenfessMessages(messages);
   };
 
-  // Fungsi untuk menghapus menfess
+  const fetchPublicChatMessages = async () => {
+    const publicChatCollectionRef = collection(db, "chats");
+    const querySnapshot = await getDocs(publicChatCollectionRef);
+
+    const messages = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    messages.sort((a, b) => a.timestamp - b.timestamp);
+    setPublicChatMessages(messages);
+  };
+
+  const moveToGambarAman = (index) => {
+    const updatedImages = [...images];
+    const [imageToApprove] = updatedImages.splice(index, 1);
+
+    const updatedApprovedImages = [...approvedImages, imageToApprove];
+
+    localStorage.setItem("Galery/images", JSON.stringify(updatedImages));
+    localStorage.setItem("Galery/GambarAman", JSON.stringify(updatedApprovedImages));
+
+    setImages(updatedImages);
+    setApprovedImages(updatedApprovedImages);
+
+    Swal.fire({
+      title: 'Berhasil!',
+      text: `Sukses Menambahkan gambar pada galeri.`,
+      icon: 'success',
+      confirmButtonText: 'OK',
+    });
+  };
+
+  const deleteImage = (index) => {
+    const updatedImages = [...images];
+    updatedImages.splice(index, 1);
+
+    localStorage.setItem("Galery/images", JSON.stringify(updatedImages));
+    setImages(updatedImages);
+
+    Swal.fire({
+      title: 'Berhasil!',
+      text: `Gambar berhasil dihapus.`,
+      icon: 'success',
+      confirmButtonText: 'OK',
+    });
+  };
+
+  const deleteApprovedImage = (index) => {
+    const updatedApprovedImages = [...approvedImages];
+    updatedApprovedImages.splice(index, 1);
+
+    localStorage.setItem("Galery/GambarAman", JSON.stringify(updatedApprovedImages));
+    setApprovedImages(updatedApprovedImages);
+
+    Swal.fire({
+      title: 'Berhasil!',
+      text: `Gambar aman berhasil dihapus.`,
+      icon: 'success',
+      confirmButtonText: 'OK',
+    });
+  };
+
   const deleteMenfess = async (id) => {
     const menfessDocRef = doc(db, "menfess", id);
 
@@ -109,54 +143,33 @@ const AdminManage = ({ isOpen, onClose }) => {
     }
   };
 
-  // Fungsi untuk memindahkan gambar ke folder GambarAman
-  const moveImageToGambarAman = async (imageName) => {
-    const currentPath = `images/${imageName}`;
-    const destinationPath = `GambarAman/${imageName}`;
+  const deletePublicChatMessage = async (id) => {
+    const publicChatDocRef = doc(db, "chats", id);
 
     try {
-      console.log(`Moving image from ${currentPath} to ${destinationPath}`);
-      await moveFirebaseFile(currentPath, destinationPath);
+      await deleteDoc(publicChatDocRef);
       Swal.fire({
         title: 'Berhasil!',
-        text: `Gambar ${imageName} telah dipindahkan ke GambarAman.`,
+        text: `Pesan public chat telah dihapus.`,
         icon: 'success',
         confirmButtonText: 'OK',
       });
-      fetchImagesFromFirebase();
+      fetchPublicChatMessages();
     } catch (error) {
-      console.error("Error moving image:", error);
+      console.error("Error deleting public chat message:", error);
       Swal.fire({
         title: 'Error!',
-        text: 'Terjadi kesalahan saat memindahkan gambar.',
+        text: 'Terjadi kesalahan saat menghapus pesan public chat.',
         icon: 'error',
         confirmButtonText: 'OK',
       });
     }
   };
 
-  // Fungsi untuk memindahkan file di Firebase Storage
-  const moveFirebaseFile = async (currentPath, destinationPath) => {
-    const storage = getStorage();
-    const oldRef = ref(storage, currentPath);
-
-    try {
-      const url = await getDownloadURL(oldRef);
-      const response = await fetch(url);
-      const blob = await response.blob();
-
-      const newRef = ref(storage, destinationPath);
-      await uploadBytes(newRef, blob);
-      await deleteObject(oldRef);
-    } catch (error) {
-      console.error("Error moving file:", error);
-      throw error;
-    }
-  };
-
   useEffect(() => {
-    fetchImagesFromFirebase();
+    fetchImagesFromLocalStorage();
     fetchMenfessMessages();
+    fetchPublicChatMessages();
   }, []);
 
   return (
@@ -202,51 +215,38 @@ const AdminManage = ({ isOpen, onClose }) => {
             },
           }}
         >
-          <Tab label="Manage Gallery" />
+          <Tab label="Manage Request" />
           <Tab label="Manage Menfess" />
+          <Tab label="Manage Gallery" />
+          <Tab label="Public Chat" />
         </Tabs>
 
         <SwipeableViews index={tabIndex} onChangeIndex={handleSwipeChange}>
-          {/* Tab Manage Gallery */}
+          {/* Tab Manage Request */}
           <Box sx={{ padding: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Gallery Management
+              Request Management
             </Typography>
-            <div className="h-[22rem] overflow-y-scroll">
+            <div className="h-[22rem]">
               {images.length > 0 ? (
                 images.map((imageData, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center px-5 py-2 mt-2"
-                  >
-                    <img
-                      src={imageData.url}
-                      alt={`Image ${index}`}
-                      className="h-10 w-10"
-                    />
+                  <div key={index} className="flex justify-between items-center px-5 py-2 mt-2">
+                    <img src={imageData.url} alt={`Image ${index}`} className="h-10 w-10" />
                     <span className="ml-2 text-white">
                       {new Date(imageData.timestamp).toLocaleString()}
                     </span>
                     <div className="flex items-center">
-                      <IconButton
-                        onClick={() => moveImageToGambarAman(imageData.name)}
-                        className="text-green-500 ml-2"
-                        title="Acc"
-                      >
+                      <IconButton onClick={() => moveToGambarAman(index)} className="text-green-500 ml-2" title="Acc">
                         <CheckIcon />
                       </IconButton>
-                      <IconButton
-                        onClick={() => deleteObject(ref(getStorage(), `images/${imageData.name}`))}
-                        className="text-red-500 ml-2"
-                        title="Delete"
-                      >
+                      <IconButton onClick={() => deleteImage(index)} className="text-red-500 ml-2" title="Delete">
                         <CloseIcon />
                       </IconButton>
                     </div>
                   </div>
                 ))
               ) : (
-                <Typography color="gray">Loading images...</Typography>
+                <Typography color="gray">Tidak Ada Gambar</Typography>
               )}
             </div>
           </Box>
@@ -261,44 +261,69 @@ const AdminManage = ({ isOpen, onClose }) => {
             </Typography>
             <div className="h-[22rem]">
               {menfessMessages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className="flex justify-between items-center mt-2 border-b border-gray-600"
-                >
+                <div key={msg.id} className="flex justify-between items-center mt-2 border-b border-gray-600">
                   <div className="flex flex-col">
                     <span className="text-white font-bold">Dari: {msg.from}</span>
                     <span className="text-white font-bold">Kepada: {msg.to}</span>
-                    <span className="text-gray-400">
-                      Tanggal: {new Date(msg.timestamp).toLocaleString()}
-                    </span>
+                    <span className="text-gray-400">Tanggal: {new Date(msg.timestamp).toLocaleString()}</span>
                     <p className="text-white">Pesan: {msg.message}</p>
                   </div>
                   <div className="flex items-center">
-                    <Button
-                      variant="outlined"
-                      onClick={() => {
-                        Swal.fire({
-                          title: 'Apakah Anda yakin?',
-                          text: "Anda akan menghapus menfess ini!",
-                          icon: 'warning',
-                          showCancelButton: true,
-                          confirmButtonColor: '#d33',
-                          cancelButtonColor: '#3085d6',
-                          confirmButtonText: 'Ya, hapus!',
-                        }).then((result) => {
-                          if (result.isConfirmed) {
-                            deleteMenfess(msg.id);
-                          }
-                        });
-                      }}
-                      className="text-red-500 ml-2"
-                      title="Delete"
-                    >
-                      Delete
-                    </Button>
+                    <IconButton onClick={() => deleteMenfess(msg.id)} className="text-red-500 ml-2" title="Delete">
+                      <CloseIcon />
+                    </IconButton>
                   </div>
                 </div>
               ))}
+            </div>
+          </Box>
+
+          {/* Tab Gallery Aman */}
+          <Box sx={{ padding: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Manage Galerry
+            </Typography>
+            <div className="h-[22rem]">
+              {approvedImages.length > 0 ? (
+                approvedImages.map((imageData, index) => (
+                  <div key={index} className="flex justify-between items-center px-5 py-2 mt-2">
+                    <img src={imageData.url} alt={`Approved Image ${index}`} className="h-10 w-10" />
+                    <span className="ml-2 text-white">
+                      {new Date(imageData.timestamp).toLocaleString()}
+                    </span>
+                    <IconButton onClick={() => deleteApprovedImage(index)} className="text-red-500 ml-2" title="Delete">
+                      <CloseIcon />
+                    </IconButton>
+                  </div>
+                ))
+              ) : (
+                <Typography color="gray">Tidak Ada Gambar Aman</Typography>
+              )}
+            </div>
+          </Box>
+
+          {/* Tab Public Chat */}
+          <Box sx={{ padding: 3 }}>
+            <Typography variant="h6" gutterBottom>
+              Public Chat Management
+            </Typography>
+            <div className="h-[22rem]">
+              {publicChatMessages.length > 0 ? (
+                publicChatMessages.map((msg) => (
+                  <div key={msg.id} className="flex justify-between items-center mt-2 border-b border-gray-600">
+                    <div className="flex flex-col">
+                      <span className="text-white">Pesan: {msg.message}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <IconButton onClick={() => deletePublicChatMessage(msg.id)} className="text-red-500 ml-2" title="Delete">
+                        <CloseIcon />
+                      </IconButton>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <Typography color="gray">Tidak Ada Pesan Public Chat</Typography>
+              )}
             </div>
           </Box>
         </SwipeableViews>

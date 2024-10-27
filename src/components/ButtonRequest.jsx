@@ -5,7 +5,6 @@ import Modal from "@mui/material/Modal"
 import Typography from "@mui/material/Typography"
 import { useSpring, animated } from "@react-spring/web"
 import CloseIcon from "@mui/icons-material/Close"
-import { getStorage, ref, listAll, getDownloadURL, getMetadata } from "firebase/storage"
 
 export default function ButtonRequest() {
 	const [open, setOpen] = useState(false)
@@ -21,37 +20,23 @@ export default function ButtonRequest() {
 
 	const [images, setImages] = useState([])
 
-	// Fungsi untuk mengambil daftar gambar dari Firebase Storage
-	const fetchImagesFromFirebase = async () => {
+	// Fungsi untuk mengambil daftar gambar dari Local Storage
+	const fetchImagesFromLocalStorage = () => {
 		try {
-			const storage = getStorage()
-			const storageRef = ref(storage, "images/")
+			// Ambil daftar gambar dari local storage dengan key "Galery/images"
+			const savedImages = JSON.parse(localStorage.getItem("Galery/images")) || []
+			
+			// Urutkan gambar berdasarkan timestamp jika diperlukan
+			const sortedImages = savedImages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
 
-			const imagesList = await listAll(storageRef)
-
-			const imagePromises = imagesList.items.map(async (item) => {
-				const url = await getDownloadURL(item)
-				const metadata = await getMetadata(item)
-
-				return {
-					url,
-					timestamp: metadata.timeCreated,
-				}
-			})
-
-			const imageURLs = await Promise.all(imagePromises)
-
-			// Urutkan array berdasarkan timestamp (dari yang terlama)
-			imageURLs.sort((a, b) => a.timestamp - b.timestamp)
-
-			setImages(imageURLs)
+			setImages(sortedImages)
 		} catch (error) {
-			console.error("Error fetching images from Firebase Storage:", error)
+			console.error("Error fetching images from Local Storage:", error)
 		}
 	}
 
 	useEffect(() => {
-		fetchImagesFromFirebase()
+		fetchImagesFromLocalStorage()
 	}, [])
 
 	return (
@@ -77,7 +62,7 @@ export default function ButtonRequest() {
 				<animated.div style={fade}>
 					<Box className="modal-container">
 						<CloseIcon
-							style={{ position: "absolute", top: "10px", right: "10px", cursor: "pointer",color: "grey", }}
+							style={{ position: "absolute", top: "10px", right: "10px", cursor: "pointer", color: "grey" }}
 							onClick={handleClose}
 						/>
 						<Typography id="spring-modal-description" sx={{ mt: 2 }}>

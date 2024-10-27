@@ -1,103 +1,82 @@
-import React, { useState, useEffect } from "react";
-import { storage } from "../firebase";
-import { ref, uploadBytes, listAll, getDownloadURL } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
-import Swal from "sweetalert2";
+import React, { useState } from "react"
+import Swal from "sweetalert2"
 
 function UploadImage() {
-  const [imageUpload, setImageUpload] = useState(null);
-  const [imageList, setImageList] = useState([]);
-  const maxUploadSizeInBytes = 10 * 1024 * 1024; // 10MB
-  const maxUploadsPerDay = 20;
-  
-  useEffect(() => {
-    listImages();
-  }, []);
+	const [imageUpload, setImageUpload] = useState(null)
+	const maxUploadSizeInBytes = 10 * 1024 * 1024 // 10MB
+	const maxUploadsPerDay = 20
 
-  const listImages = () => {
-    const imageListRef = ref(storage, "images/");
-    listAll(imageListRef)
-      .then((response) => {
-        const imagePromises = response.items.map((item) => getDownloadURL(item));
-        Promise.all(imagePromises)
-          .then((urls) => {
-            setImageList(urls);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+	const uploadImageToLocal = () => {
+		if (imageUpload == null) return
 
-  const uploadImage = () => {
-    if (imageUpload == null) return;
+		const uploadedImagesCount = parseInt(localStorage.getItem("uploadedImagesCount")) || 0
+		const lastUploadDate = localStorage.getItem("lastUploadDate")
 
-    const uploadedImagesCount = parseInt(localStorage.getItem("uploadedImagesCount")) || 0;
-    const lastUploadDate = localStorage.getItem("lastUploadDate");
+		// Batasi jumlah upload per hari
+		if (uploadedImagesCount >= maxUploadsPerDay) {
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "You have reached the maximum uploads for today.",
+				customClass: {
+					container: "sweet-alert-container",
+				},
+			})
+			return
+		}
 
-    if (uploadedImagesCount >= maxUploadsPerDay) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "You have reached the maximum uploads for today.",
-		customClass: {
-			container: "sweet-alert-container",
-		},
-      });
-      return;
-    }
+		if (lastUploadDate && new Date(lastUploadDate).toDateString() !== new Date().toDateString()) {
+			// Reset jumlah jika hari baru
+			localStorage.setItem("uploadedImagesCount", 0)
+		}
 
-    if (lastUploadDate && new Date(lastUploadDate).toDateString() !== new Date().toDateString()) {
-      // Reset the count if it's a new day.
-      localStorage.setItem("uploadedImagesCount", 0);
-    }
+		// Batasi ukuran gambar
+		if (imageUpload.size > maxUploadSizeInBytes) {
+			Swal.fire({
+				icon: "error",
+				title: "Oops...",
+				text: "The maximum size for a photo is 10MB",
+				customClass: {
+					container: "sweet-alert-container",
+				},
+			})
+			return
+		}
 
-    if (imageUpload.size > maxUploadSizeInBytes) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "The maximum size for a photo is 10MB",
-		customClass: {
-			container: "sweet-alert-container",
-		},
-      });
-      return;
-    }
+		// Konversi gambar ke base64
+		const reader = new FileReader()
+		reader.onload = () => {
+			const base64Image = reader.result
+			const newImage = {
+				url: base64Image,
+				timestamp: new Date().toISOString(),
+			}
 
-    const imageRef = ref(storage, `images/${imageUpload.name}-${uuidv4()}`);
-    uploadBytes(imageRef, imageUpload)
-      .then((snapshot) => {
-        getDownloadURL(snapshot.ref)
-          .then((url) => {
-            setImageList((prev) => [...prev, url]);
-            localStorage.setItem("uploadedImagesCount", uploadedImagesCount + 1);
-            localStorage.setItem("lastUploadDate", new Date().toISOString());
+			// Ambil gambar yang sudah ada di local storage dan tambahkan gambar baru
+			const existingImages = JSON.parse(localStorage.getItem("Galery/images")) || []
+			existingImages.push(newImage)
+			localStorage.setItem("Galery/images", JSON.stringify(existingImages))
 
-            Swal.fire({
-              icon: "success",
-              title: "Success!",
-              text: "Your image has been successfully uploaded.",
-			  customClass: {
-				container: "sweet-alert-container",
-			},
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-        setImageUpload(null);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+			// Update jumlah upload dan tanggal
+			localStorage.setItem("uploadedImagesCount", uploadedImagesCount + 1)
+			localStorage.setItem("lastUploadDate", new Date().toISOString())
 
-  const handleImageChange = (event) => {
-    setImageUpload(event.target.files[0]);
-  };
+			Swal.fire({
+				icon: "success",
+				title: "Success!",
+				text: "Your image has been successfully uploaded.",
+				customClass: {
+					container: "sweet-alert-container",
+				},
+			})
+			setImageUpload(null)
+		}
+		reader.readAsDataURL(imageUpload)
+	}
+
+	const handleImageChange = (event) => {
+		setImageUpload(event.target.files[0])
+	}
 
 	return (
 		<div className="flex flex-col justify-center items-center">
@@ -148,7 +127,7 @@ function UploadImage() {
 			<button
 				type="button"
 				className="py-2.5 w-[60%] mb-0 md:mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-				onClick={uploadImage}>
+				onClick={uploadImageToLocal}>
 				UPLOAD
 			</button>
 		</div>
