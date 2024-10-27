@@ -72,7 +72,7 @@ export default function BoxConfess() {
 						<img src="/paper-plane.png" alt="" className="w-auto h-6" />
 						<img src="/next.png" alt="" className="h-3 w-3" />
 					</div>
-					<h1 className="capitalize text-white text-left pr-5 text-base font-semibold  mt-5">Confess</h1>
+					<h1 className="capitalize text-white text-left pr-5 text-base font-semibold  mt-5">Menfess</h1>
 				</div>
 			</div>
 

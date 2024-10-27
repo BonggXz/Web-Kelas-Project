@@ -239,6 +239,115 @@ body {
 	z-index: 999;
 }
 
+/* Fullscreen container with hidden background */
+.login-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background-color: transparent; /* Make the background transparent */
+  }
+  
+  /* Login box styling remains the same */
+  .login-box {
+	background: rgba(255, 255, 255, 0.85);
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	padding: 40px;
+	width: 320px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+  
+  .login-title {
+	font-size: 24px;
+	margin-bottom: 20px;
+	color: #333;
+  }
+  
+  .login-input {
+	width: 100%;
+	padding: 12px;
+	margin: 10px 0;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	font-size: 16px;
+	outline: none;
+	transition: all 0.3s;
+  }
+  
+  .login-input:focus {
+	border-color: #333;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-button {
+	width: 100%;
+	padding: 12px;
+	background: linear-gradient(45deg, #6a5af9, #a1b7f2);
+	border: none;
+	border-radius: 8px;
+	color: #fff;
+	font-size: 18px;
+	cursor: pointer;
+	transition: background 0.3s;
+	margin-top: 10px;
+  }
+  
+  .login-button:hover {
+	background: linear-gradient(45deg, #5c4ae3, #93a5e1);
+  }
+  
+
+/* Fullscreen container for profile page */
+.profile-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	background-color: transparent; /* Background transparan */
+}
+
+/* Profile box styling */
+.profile-box {
+	background: rgba(255, 255, 255, 0.85);
+	border-radius: 15px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	padding: 40px;
+	width: 320px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* Profile title styling */
+.profile-title {
+	font-size: 24px;
+	margin-bottom: 20px;
+	color: #333;
+}
+
+/* Logout button styling */
+.logout-button {
+	width: 100%;
+	padding: 12px;
+	background: #e74c3c; /* Warna merah */
+	border: none;
+	border-radius: 8px;
+	color: #fff;
+	font-size: 18px;
+	cursor: pointer;
+	transition: background 0.3s;
+	margin-top: 10px;
+}
+
+.logout-button:hover {
+	background: #c0392b; /* Merah lebih gelap saat hover */
+}
+  
+  
+
 #Carousel img {
 	height: 300px;
 	width: 300px;
@@ -547,7 +656,7 @@ input:focus {
 }
 
 .sweet-alert-container {
-	z-index: 9999; /* Atur z-index sesuai kebutuhan Anda */
+	z-index: 999999; /* Atur z-index sesuai kebutuhan Anda */
 }
 
 @media only screen and (min-width: 768px) {

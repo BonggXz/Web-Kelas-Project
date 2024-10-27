@@ -7,11 +7,6 @@ const Footer = () => {
 				<div class="md:flex md:justify-between">
 					<div class="mb-6 md:mb-0">
 						<a href="#" class="flex items-center">
-							<img
-								src="/LogoTKJ3.png"
-								alt=""
-								className="h-[4.5rem] w-[4.5rem] right-2 relative rounded-full brightness-200"
-							/>
 							<span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
 						</a>
 					</div>
@@ -51,7 +46,7 @@ const Footer = () => {
 						</div>
 					</div>
 
-					<div className="flex items-center justify-center mt-8  md:hidden">
+					<div className="flex items-center justify-center mt-8 md:hidden">
 						{/* RATING */}
 						<Rating />
 					</div>

@@ -95,7 +95,6 @@ function Menfess() {
           onChange={(e) => setMessage(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Message"
-          maxLength={60}
         ></textarea>
         <button onClick={sendMenfess} className="send-button">
           <img src="/paper-plane.png" alt="" className="h-4 w-4 lg:h-6 lg:w-6" />

@@ -109,6 +109,7 @@ const Carousel = () => {
 			<div className="flex justify-center items-center gap-6 text-base mt-5 lg:mt-8">
 				<ButtonSend />
 				<ButtonRequest />
+				
 			</div>
 
 			<Modal
