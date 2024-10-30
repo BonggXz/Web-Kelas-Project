@@ -215,42 +215,11 @@ const AdminManage = ({ isOpen, onClose }) => {
             },
           }}
         >
-          <Tab label="Manage Request" />
           <Tab label="Manage Menfess" />
-          <Tab label="Manage Gallery" />
           <Tab label="Public Chat" />
         </Tabs>
 
         <SwipeableViews index={tabIndex} onChangeIndex={handleSwipeChange}>
-          {/* Tab Manage Request */}
-          <Box sx={{ padding: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Request Management
-            </Typography>
-            <div className="h-[22rem]">
-              {images.length > 0 ? (
-                images.map((imageData, index) => (
-                  <div key={index} className="flex justify-between items-center px-5 py-2 mt-2">
-                    <img src={imageData.url} alt={`Image ${index}`} className="h-10 w-10" />
-                    <span className="ml-2 text-white">
-                      {new Date(imageData.timestamp).toLocaleString()}
-                    </span>
-                    <div className="flex items-center">
-                      <IconButton onClick={() => moveToGambarAman(index)} className="text-green-500 ml-2" title="Acc">
-                        <CheckIcon />
-                      </IconButton>
-                      <IconButton onClick={() => deleteImage(index)} className="text-red-500 ml-2" title="Delete">
-                        <CloseIcon />
-                      </IconButton>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <Typography color="gray">Tidak Ada Gambar</Typography>
-              )}
-            </div>
-          </Box>
-
           {/* Tab Manage Menfess */}
           <Box sx={{ padding: 3 }}>
             <Typography variant="h6" gutterBottom>
@@ -275,30 +244,6 @@ const AdminManage = ({ isOpen, onClose }) => {
                   </div>
                 </div>
               ))}
-            </div>
-          </Box>
-
-          {/* Tab Gallery Aman */}
-          <Box sx={{ padding: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Manage Galerry
-            </Typography>
-            <div className="h-[22rem]">
-              {approvedImages.length > 0 ? (
-                approvedImages.map((imageData, index) => (
-                  <div key={index} className="flex justify-between items-center px-5 py-2 mt-2">
-                    <img src={imageData.url} alt={`Approved Image ${index}`} className="h-10 w-10" />
-                    <span className="ml-2 text-white">
-                      {new Date(imageData.timestamp).toLocaleString()}
-                    </span>
-                    <IconButton onClick={() => deleteApprovedImage(index)} className="text-red-500 ml-2" title="Delete">
-                      <CloseIcon />
-                    </IconButton>
-                  </div>
-                ))
-              ) : (
-                <Typography color="gray">Tidak Ada Gambar Aman</Typography>
-              )}
             </div>
           </Box>
 
