@@ -20,7 +20,7 @@ const Footer = () => {
 									</a>
 								</li>
 								<li>
-									<a href="https://www.instagram.com/dafyall/?hl=id" class="hover:underline">
+									<a href="https://www.instagram.com/danial.tar.gz/?hl=id" class="hover:underline">
 										DANIAL
 									</a>
 								</li>
@@ -30,13 +30,8 @@ const Footer = () => {
 							<h2 class="mb-4 text-sm font-semibold uppercase text-white">Follow us</h2>
 							<ul class="text-gray-400 dark:text-gray-400 font-medium">
 								<li class="mb-2">
-									<a href="https://www.instagram.com/acetkjthree/?hl=id" class="hover:underline ">
+									<a href="https://www.instagram.com/faselive_/?hl=id" class="hover:underline ">
 										Instagram
-									</a>
-								</li>
-								<li>
-									<a href="https://www.youtube.com/@11TKJ3" class="hover:underline">
-										Youtube
 									</a>
 								</li>
 							</ul>
