@@ -223,6 +223,20 @@ body {
     width: 100%;
     padding: 13px 0;
 }
+
+.css-1j0gxxp {
+    border-radius: 12px;
+    box-sizing: content-box;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    touch-action: none;
+    color: #2fe72f !important;
+    -webkit-tap-highlight-color: transparent;
+    height: 4px;
+    width: 100%;
+    padding: 13px 0px;
+}
 .slick-slide {
 	padding: 0 10px;
 	box-sizing: border-box;
